@@ -30,7 +30,7 @@ class YouTube_Subs_Widget extends WP_Widget {
         if ( ! empty( $instance['title'] ) ) {
             echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
         }
-        echo '<div class="g-ytsubscribe" data-channel="'.$instance['channel'].'" data-layout="full" data-count="default"></div>';
+        echo '<div class="g-ytsubscribe" data-channel="'.$instance['channel'].'" data-layout="'.$instance['data_layout'].'" data-count="default"></div>';
         
         echo $args['after_widget'];
     }
@@ -46,6 +46,8 @@ class YouTube_Subs_Widget extends WP_Widget {
         $title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'Subs YT', 'yts_domain' );
         
         $channel = ! empty( $instance['channel'] ) ? $instance['channel'] : esc_html__( 'PatrykPiwko', 'yts_channel' );
+        
+        $data_layout = ! empty( $instance['data_layout'] ) ? $instance['data_layout'] : esc_html__( 'default', 'yts_domain' );
         ?>
         
 		<p>
@@ -74,6 +76,23 @@ class YouTube_Subs_Widget extends WP_Widget {
 		value="<?php echo esc_attr( $channel ); ?>">
 		</p>
 		
+		<p>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'data_layout' ) ); ?>">
+		    <?php esc_attr_e( 'Option:', 'yts_domain' ); ?>
+		</label> 
+		
+		<select 
+    		class="widefat" 
+    		id="<?php echo esc_attr( $this->get_field_id( 'data_layout' ) ); ?>" 
+    		name="<?php echo esc_attr( $this->get_field_name( 'data_layout' ) ); ?>">
+    		<option value="default" <?php echo ($data_layout == 'default') ? 'selected' : ''; ?>>
+    		    Default
+    		</option>
+    		<option value="full" <?php echo ($data_layout == 'full') ? 'selected' : ''; ?>>
+    		    Full
+    		</option>
+	    </select>
+		</p>
 		<?php 
 	}
 
@@ -89,9 +108,12 @@ class YouTube_Subs_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
+		
 		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
 		
 		$instance['channel'] = ( ! empty( $new_instance['channel'] ) ) ? strip_tags( $new_instance['channel'] ) : '';
+		
+		$instance['data_layout'] = ( ! empty( $new_instance['data_layout'] ) ) ? strip_tags( $new_instance['data_layout'] ) : '';
 
 		return $instance;
 	}
